@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>webConto</title>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" type="text/css" href="css/index.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+	</head>
+	<body>
+		<div class="container vertical-center">
+			<div class="card text-center">
+				<div class="card-header">
+					Konto
+				</div>
+				<div class="card-block">
+					<div class="form-group row">
+						<label for="monatslohn" class="col-4 col-form-label">Monatslohn</label>
+						<div class="col-8">
+							<input class="form-control" type="number" value="0.00" id="monatslohn">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="alter" class="col-4 col-form-label">Alter</label>
+						<div class="col-8">
+							<input class="form-control" type="number" value="18" id="alter" min="18" max="100">
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="kinder" class="col-4 col-form-label">Kinder</label>
+						<div class="col-8">
+							<div class="input-group">
+								<span class="input-group-btn" onclick="remChild()">
+									<button type="button" class="btn btn-danger">-</button>
+								</span>
+								<input id="kinder" class="form-control" type="text" value="0" min="0" style="text-align: center;" readonly>
+								<span class="input-group-btn" onclick="addChild()">
+									<button type="button" class="btn btn-success">+</button>
+								</span>
+							</div>
+						</div>
+					</div>
+					<button onclick="calculate()" type="button" class="btn btn-primary col-12">Berechne</button>
+				</div>
+				<div class="card-footer text-muted" id="status">
+					Bitte f&uuml;llen Sie das Formular aus.
+				</div>
+			</div>
+			<div class="card text-center" style="margin-left: 50px;">
+				<div class="card-header">
+					Kinder
+				</div>
+				<div class="card-block">
+					<table class="table" id="kinderliste">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Name</th>
+								<th>Alter</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal fade" id="result" tabindex="-1" role="dialog" aria-labelledby="resultLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="resultLabel">Resultat</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							...
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="childadd" tabindex="-1" role="dialog" aria-labelledby="childtLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="childLabel">Kind</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="form-group row">
+								<label for="name" class="col-4 col-form-label">Name</label>
+								<div class="col-8">
+									<input class="form-control" type="text" id="name">
+								</div>
+							</div>
+							<div class="form-group row">
+								<label for="kinderalter" class="col-4 col-form-label">Alter</label>
+								<div class="col-8">
+									<input class="form-control" type="number" value="18" id="kinderalter" min="18" max="100">
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+							<button type="button" class="btn btn-primary" onclick="writeChild()">Hinzufügen</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="childrem" tabindex="-1" role="dialog" aria-labelledby="childremtLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="childremtLabel">Kind</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="list-group" id="kinderremliste">
+								
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Abbrechen</button>
+							<button type="button" class="btn btn-primary" onclick="deleteChild()">L&ouml;schen</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+			<script src="https://cdnjs.cloudflare.com/ajax/libs/decimal.js/7.2.4/decimal.js"></script>
+			<script type="text/javascript" src="js/bvg.js"></script>
+			<script type="text/javascript" src="js/lohnabrechnung.js"></script>
+			<script type="text/javascript" src="js/index.js"></script>
+		</body>
+	</html>
