@@ -25,11 +25,14 @@ const MAP = [
 const KOORDINATIONSABZUG = 24675;
 const MINIMUM = 21150;
 const MAXIMUM = 84600;
-const RISIKOBEITRAG = new Decimal('0.06'); // zwischen 2% und 6%
+var RISIKOBEITRAG = new Decimal('0.02'); // zwischen 2% und 6%
+var MONATE = 12;
 
 class BVG {
-	constructor(alter, monatslohn) {
+	constructor(alter, monatslohn, monate, risikoprozent) {
 		this.monatslohn = new Decimal(monatslohn);
+		RISIKOBEITRAG = new Decimal(risikoprozent).div(100);
+		MONATE = parseInt(monate);
 		// find den prozentsatz für das alter
 		for(let i = 0; i < MAP.length; i++) {
 			if(alter >= MAP[i].min && alter <= MAP[i].max) {
@@ -43,13 +46,13 @@ class BVG {
 
 	berechneBVG() {
 		let monatslohn = this.monatslohn;
-		let jahreslohn = monatslohn.times(12);
+		let jahreslohn = monatslohn.times(MONATE);
 		if(jahreslohn > MINIMUM) {
 			if(jahreslohn > MAXIMUM) {
 				jahreslohn = new Decimal(MAXIMUM);
 			}
 			let versichert = jahreslohn.minus(KOORDINATIONSABZUG);
-			let monatlichVersichert = versichert.div(12);
+			let monatlichVersichert = versichert.div(MONATE);
 			let beitrag = new Decimal('0.0');
 			let risikobeitrag = monatlichVersichert.times(RISIKOBEITRAG);
 			beitrag = beitrag.plus(risikobeitrag);

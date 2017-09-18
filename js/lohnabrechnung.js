@@ -3,10 +3,10 @@ const ALV = new Decimal('0.011');
 const NBU = new Decimal('0.0145');
 
 class Lohnabrechnung {
-	constructor(monatslohn, alter, kinder) {
+	constructor(monatslohn, alter, kinder, monate, risikoprozent) {
 		this.monatslohn = new Decimal(monatslohn);
 		this.kinder = kinder;
-		this.bvg = new BVG(alter, monatslohn);
+		this.bvg = new BVG(alter, monatslohn, monate, risikoprozent);
 
 		this.berechneBruttolohn();
 		this.berechneNettolohn();

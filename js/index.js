@@ -9,6 +9,8 @@ var kinderalter = $('#kinderalter');
 var kindername = $('#name');
 var childremmodal = $('#childrem');
 var kinderlisterem = $('#kinderremliste');
+var monate = $('#monate');
+var risikobeitrag = $('#risikobeitrag');
 
 var rmonatslohn = $('#rmonatslohn');
 var rbruttolohn = $('#rbruttolohn');
@@ -115,7 +117,17 @@ function validate() {
 		alter.parent().removeClass('has-danger');
 		alter.parent().addClass('has-success');
 	}
+	let _prozent = new Decimal(risikobeitrag.val());
+	if(_prozent.greaterThanOrEqualTo(2.00) && _prozent.lessThanOrEqualTo(6.00)) {
+		risikobeitrag.parent().removeClass('has-danger');
+		risikobeitrag.parent().addClass('has-success');
+	} else {
+		risikobeitrag.parent().removeClass('has-success');
+		risikobeitrag.parent().addClass('has-danger');
+		failed = true;
+	}
 	kinder.parent().addClass('has-success'); // It should always be a success unless someone touches the HTML code.
+	monate.parent().addClass('has-success'); // It should always be a success unless someone touches the HTML code.
 	if(failed) {
 		cstatus.text('Bitte überprüfen Sie das Formular.');
 	} else {
@@ -132,7 +144,9 @@ function calculate() {
 		for(let i = 0; i < kinderliste.find('tbody').children().length; i++) {
 			childs.push(parseInt(kinderliste.find('tbody').children().eq(i).children().eq(2).text()));
 		}
-		let lohnabrechnung = new Lohnabrechnung(monatslohn.val(), alter.val(), childs);
+		let _monate = monate.val();
+		let _risikoprozent = risikobeitrag.val();
+		let lohnabrechnung = new Lohnabrechnung(monatslohn.val(), alter.val(), childs, _monate, _risikoprozent);
 		rmonatslohn.val(lohnabrechnung.monatslohn);
 		rkinderzulagen.val('+' + lohnabrechnung.kinderzulagen + ' (' + lohnabrechnung.kinder.length + ' Kinder)');
 		rbruttolohn.val(lohnabrechnung.bruttolohn);
